@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Get system update and install git to get install script.
+
+
+pacman -Syu git
+git clone git://github.com/rainbowfart/axx
+cd axx && ./run
