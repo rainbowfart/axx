@@ -3,6 +3,6 @@
 # Get system update and install git to get install script.
 
 
-pacman -Syu git
+pacman -Syu --noconfirm git
 git clone git://github.com/rainbowfart/axx
 cd axx && ./run
