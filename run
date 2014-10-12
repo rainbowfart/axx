@@ -1,3 +1,48 @@
 #!/bin/sh
 
-echo 'run! bitches'
+disk = /dev/sda
+sgdisk -og $disk
+sgdisk -n 1:2048:411647 -c 1:"Linux /boot" -t 1:8300 $disk # 200M
+sgdisk -n 2:411648:4605951 -c 2:"Linux /swap" -t 2:8200 $disk # 2G
+sgdisk -n 3:4605952:46548991 -c 3:"Linux /"
+
+END=`sgdisk -E $disk`
+sgdisk -n 4:46548992:$END -c 4:"Linux /home" -t 4:8300 $disk # ...
+sgdisk -p $disk
+
+# Format partisions
+mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda3
+mkfs.ext4 /dev/sda4
+
+# Active swap partision
+mkswap /dev/sda2
+swapon /dev/sda2
+
+# Mount all partisions
+mount /dev/sda3 /mnt
+cd /mnt
+mkdir {boot,home}
+mount /dev/sda1 /mnt/boot
+mount /dev/sda4 /mnt/home
+
+# Generate repository mirrorlist of Taiwan
+url = "https://www.archlinux.org/mirrorlist/?country=TW&use_mirror_status=on"
+tmpfile = /tmp/mirrorlist-tw
+wget -0 $tempfile $url > /dev/null 2>&1
+sed -i -e "s/^#Server/Server/g" $tmpfile
+mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.orig
+cp $tmpfile /etc/pacman.d/mirrorlist
+
+# Install base system and syslinux
+# You need gptfdis to make syslinux work on
+pacstrap /mnt base base-devel syslinux gptfdisk
+
+# Also set /boot to be bootable (-a) arrt
+arch-chroot /mnt syslinux-install_update -iam
+
+arch-chroot /mnt mkinitcpio -p linux
+genfstab -p /mnt >> /mnt/etc/fstab
+
+umount /mnt/{boot,home} /mnt
+reboot

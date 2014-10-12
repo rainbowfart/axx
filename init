@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Get system update and install git to get install script.
+# Update database and install git to get install script.
 
 
-pacman -Syu --noconfirm git
+pacman -Syy --noconfirm git
 git clone git://github.com/rainbowfart/axx
-cd axx && ./run
+axx/run
