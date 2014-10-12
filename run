@@ -25,8 +25,8 @@ mkdir {boot,home}
 mount /dev/sda1 /mnt/boot
 
 # Generate repository mirrorlist of Taiwan
-url = "https://www.archlinux.org/mirrorlist/?country=TW&use_mirror_status=on"
-tmpfile = /tmp/mirrorlist-tw
+url="https://www.archlinux.org/mirrorlist/?country=TW&use_mirror_status=on"
+tmpfile=/tmp/mirrorlist-tw
 wget -0 $tempfile $url > /dev/null 2>&1
 sed -i -e "s/^#Server/Server/g" $tmpfile
 mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.orig
