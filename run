@@ -16,31 +16,31 @@ mkfs.ext4 /dev/sda3
 # Active swap partision
 mkswap /dev/sda2
 swapon /dev/sda2
-
-# Mount all partisions
-mount /dev/sda3 /mnt
-cd /mnt
-mkdir {boot,home}
-mount /dev/sda1 /mnt/boot
-
-# Generate repository mirrorlist of Taiwan
-url = "https://www.archlinux.org/mirrorlist/?country=TW&use_mirror_status=on"
-tmpfile = /tmp/mirrorlist-tw
-wget -0 $tempfile $url > /dev/null 2>&1
-sed -i -e "s/^#Server/Server/g" $tmpfile
-mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.orig
-cp $tmpfile /etc/pacman.d/mirrorlist
-
-# Install base system and syslinux
-# You need gptfdis to make syslinux work on
-pacstrap -i /mnt base base-devel syslinux gptfdisk
-genfstab -U -p /mnt >> /mnt/etc/fstab
-
-# Also set /boot to be bootable (-a) arrt
-arch-chroot /mnt syslinux-install_update -iam
-
-arch-chroot /mnt mkinitcpio -p linux
-
-
-umount /mnt/{boot,home} /mnt
-# reboot
+#
+# # Mount all partisions
+# mount /dev/sda3 /mnt
+# cd /mnt
+# mkdir {boot,home}
+# mount /dev/sda1 /mnt/boot
+#
+# # Generate repository mirrorlist of Taiwan
+# url = "https://www.archlinux.org/mirrorlist/?country=TW&use_mirror_status=on"
+# tmpfile = /tmp/mirrorlist-tw
+# wget -0 $tempfile $url > /dev/null 2>&1
+# sed -i -e "s/^#Server/Server/g" $tmpfile
+# mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.orig
+# cp $tmpfile /etc/pacman.d/mirrorlist
+#
+# # Install base system and syslinux
+# # You need gptfdis to make syslinux work on
+# pacstrap -i /mnt base base-devel syslinux gptfdisk
+# genfstab -U -p /mnt >> /mnt/etc/fstab
+#
+# # Also set /boot to be bootable (-a) arrt
+# arch-chroot /mnt syslinux-install_update -iam
+#
+# arch-chroot /mnt mkinitcpio -p linux
+#
+#
+# umount /mnt/{boot,home} /mnt
+# # reboot
