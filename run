@@ -6,7 +6,7 @@ END=`sgdisk -E $disk`
 sgdisk -og $disk
 sgdisk -n 1:2048:411647 -c 1:"Linux /boot" -t 1:8300 $disk # 200M
 sgdisk -n 2:411648:4605951 -c 2:"Linux /swap" -t 2:8200 $disk # 2G
-sgdisk -n 3:4605952:$END -c 3:"Linux /" -t 3:8200 $disk # Rest of space
+sgdisk -n 3:4605952:$END -c 3:"Linux /" -t 3:8300 $disk # Rest of space
 sgdisk -p $disk
 
 # Format partisions
